@@ -24,4 +24,23 @@ class NetoneNumberTest extends TestCase
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonPath('errors.netone_number.0', 'The netone number field is required.');
     }
+
+    /**
+     * NetOne numbers should start with 071
+     *
+     * @return void
+     */
+    public function test_only_valid_netone_numbers_are_allowed()
+    {
+        $response = $this->postJson('api/v1/topups', [
+            'netone_number' => '0782632563',
+            'payment_method' => 'ecocash',
+            'ecocash_number' => '0782632563',
+            'amount' => '25'
+        ]);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonPath('errors.netone_number.0', 'The netone number field is not valid.');
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidEcoCashNumber;
+use App\Rules\ValidMoney;
+use App\Rules\ValidNetoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RechargePinlessRequest extends FormRequest
@@ -24,10 +27,10 @@ class RechargePinlessRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => ['required', 'numeric'],
-            'netone_number' => ['required'],
+            'amount' => ['required', 'numeric', new ValidMoney],
             'payment_method' => ['required', 'in:ecocash,stripe'],
-            'ecocash_number' => ['required_if:payment_method,ecocash']
+            'netone_number' => ['required', new ValidNetoneNumber],
+            'ecocash_number' => ['required_if:payment_method,ecocash', new ValidEcoCashNumber]
         ];
     }
 }

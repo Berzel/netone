@@ -24,4 +24,23 @@ class EcoCashNumberTest extends TestCase
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonPath('errors.ecocash_number.0', 'The ecocash number field is required when payment method is ecocash.');
     }
+
+    /**
+     * EcoCash numbers should start with 077, 078
+     *
+     * @return void
+     */
+    public function test_only_valid_ecocash_numbers_are_allowed()
+    {
+        $response = $this->postJson('api/v1/topups', [
+            'netone_number' => '0717409643',
+            'payment_method' => 'ecocash',
+            'ecocash_number' => '0717409643',
+            'amount' => '25'
+        ]);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonPath('errors.ecocash_number.0', 'The ecocash number field is not valid.');
+    }
 }

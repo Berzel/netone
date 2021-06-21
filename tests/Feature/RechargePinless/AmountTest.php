@@ -43,4 +43,23 @@ class AmountTest extends TestCase
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonPath('errors.amount.0', 'The amount must be a number.');
     }
+
+    /**
+     * The amount field should be numeric with at most 2 decimals
+     *
+     * @return void
+     */
+    public function test_that_amount_values_with_more_than_two_decimals_are_not_allowed()
+    {
+        $response = $this->postJson('api/v1/topups', [
+            'netone_number' => '0717409643',
+            'amount' => 1.123,
+            'payment_method' => 'ecocash',
+            'ecocash_number' => '0782632563'
+        ]);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonPath('errors.amount.0', 'The amount field is not valid.');
+    }
 }
