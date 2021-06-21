@@ -24,7 +24,7 @@ class RechargePinlessRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => ['required'],
+            'amount' => ['required', 'numeric'],
             'netone_number' => ['required'],
             'payment_method' => ['required', 'in:ecocash,stripe'],
             'ecocash_number' => ['required_if:payment_method,ecocash']
