@@ -28,7 +28,7 @@ class RechargePinlessRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'numeric', new ValidMoney],
-            'payment_method' => ['required', 'in:ecocash,stripe'],
+            'payment_method' => ['required', 'in:ecocash'],
             'netone_number' => ['required', new ValidNetoneNumber],
             'ecocash_number' => ['required_if:payment_method,ecocash', new ValidEcoCashNumber]
         ];
