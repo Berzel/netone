@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Commands\ChargeEcocashNumberCommand;
+use App\Commands\CheckEcocashPaymentCommand;
+use App\Events\EcocashPaymentCompleted;
+use App\Events\EcocashPaymentFailed;
 use App\Models\EcocashPayment;
 use Illuminate\Support\Facades\Http;
 
@@ -102,6 +105,70 @@ class EcocashService {
             ]
         ];
 
-        Http::withBasicAuth($this->merchantApiUsername, $this->merchantApiPassword)->post($this->merchantApiBaseUrl . 'transactions/amount', $data)->throw();
+        try {
+            Http::withBasicAuth($this->merchantApiUsername, $this->merchantApiPassword)
+                ->post($this->merchantApiBaseUrl . '/transactions/amount', $data)->throw();
+        }
+
+        catch (\Throwable $th) {
+            // TODO: Capture exception
+        }
+    }
+
+    /**
+     * Check the latest status of an ecocash payment
+     *
+     * @param CheckPaymentCommand $command
+     * @return EcocashPayment
+     */
+    public function checkPaymentStatus(CheckEcocashPaymentCommand $command) : EcocashPayment
+    {
+        $payment = EcocashPayment::find($command->get('id'));
+
+        try {
+            $txStatus = Http::withBasicAuth($this->merchantApiUsername, $this->merchantApiPassword)
+                ->get($payment->poll_url)->throw()['transactionOperationStatus'];
+
+            $statusHandlers = [
+                'FAILED' => fn(): EcocashPayment => $this->onPaymentFailed($payment),
+                'COMPLETED' => fn(): EcocashPayment => $this->onPaymentCompleted($payment)
+            ];
+
+            return $statusHandlers[$txStatus]();
+        }
+
+        catch (\Throwable $th) {
+            // TODO: Capture exception
+        }
+    }
+
+    /**
+     * Handle failed ecocash payment
+     *
+     * @param EcocashPayment $payment
+     * @return EcocashPayment
+     */
+    private function onPaymentFailed(EcocashPayment $payment) : EcocashPayment
+    {
+        $payment->status = 'failed';
+        $payment->save();
+
+        event(new EcocashPaymentFailed($payment));
+        return $payment->fresh();
+    }
+
+    /**
+     * Handle a successful ecocash payment
+     *
+     * @param EcocashPayment $payment
+     * @return EcocashPayment
+     */
+    private function onPaymentCompleted(EcocashPayment $payment) : EcocashPayment
+    {
+        $payment->status = 'paid';
+        $payment->save();
+
+        event(new EcocashPaymentCompleted($payment));
+        return $payment->fresh();
     }
 }

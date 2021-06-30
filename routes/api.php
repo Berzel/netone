@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\EcocashWebhookController;
 use App\Http\Controllers\RechargePinlessController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::post('topups', RechargePinlessController::class);
+    Route::post('topups', RechargePinlessController::class)->name('airtime.topup');
+    Route::post('ecocash-payments/{payment}/webhook', EcocashWebhookController::class)->name('ecocash.webhook');
 });

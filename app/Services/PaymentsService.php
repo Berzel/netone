@@ -22,7 +22,13 @@ class PaymentsService {
             'ecocash' => fn(): EcocashPayment => $this->createEcoCashPayment(new CreateEcoCashPaymentCommand($command->data())),
         ];
 
-        return $paymentMethods[$command->get('payment_method')]();
+        try {
+            return $paymentMethods[$command->get('payment_method')]();
+        }
+
+        catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
