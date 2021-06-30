@@ -125,6 +125,10 @@ class EcocashService {
     {
         $payment = EcocashPayment::find($command->get('id'));
 
+        if ($payment->isPaid()) {
+            return $payment;
+        }
+
         try {
             $txStatus = Http::withBasicAuth($this->merchantApiUsername, $this->merchantApiPassword)
                 ->get($payment->poll_url)->throw()['transactionOperationStatus'];

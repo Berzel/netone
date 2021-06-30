@@ -59,4 +59,14 @@ class EcocashPayment extends Payment
     {
         return route('ecocash.webhook', ['payment' => $this->id]);
     }
+
+    /**
+     * Check if this payment is paid
+     *
+     * @return bool
+     */
+    public function isPaid() : bool
+    {
+        return $this->status === 'paid';
+    }
 }
