@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\RechargePinless;
 
+use App\Services\EcocashService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,8 @@ class PaymentMethodTest extends TestCase
      */
     public function test_that_ecocash_is_a_valid_payment_method()
     {
+        $ecoCashService = $this->spy(EcocashService::class);
+
         $response = $this->postJson('api/v1/topups', [
             'amount' => 25,
             'netone_number' => '0717409643',
@@ -44,6 +47,8 @@ class PaymentMethodTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_CREATED);
+
+        $ecoCashService->shouldHaveReceived('charge')->once();
     }
 
     /**
@@ -52,7 +57,7 @@ class PaymentMethodTest extends TestCase
      *
      * @return void
      */
-    public function test_that_stripe_is_a_valid_payment_method()
+    public function test_that_stripe_is_currently_not_enabled()
     {
         $response = $this->postJson('api/v1/topups', [
             'amount' => 25,

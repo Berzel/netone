@@ -3,8 +3,10 @@
 namespace Tests\Feature\RechargePinless;
 
 use App\Models\EcocashPayment;
+use App\Services\EcocashService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class RechargeSuccessTest extends TestCase
@@ -19,7 +21,7 @@ class RechargeSuccessTest extends TestCase
      */
     public function test_that_a_netone_number_is_recharged_successfully()
     {
-        // Fake ecocash & netone http calls for this test
+        $ecoCashService = $this->spy(EcocashService::class);
 
         $response = $this->postJson('api/v1/topups', [
             'amount' => '25',
@@ -46,5 +48,7 @@ class RechargeSuccessTest extends TestCase
             'status' => 'pending',
             'ecocash_number' => '0782632563'
         ]);
+
+        $ecoCashService->shouldHaveReceived('charge')->once();
     }
 }

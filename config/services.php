@@ -30,4 +30,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ecocash' => [
+        'merchant' => [
+            'pin' => env('ECOCASH_MERCHANT_PIN', ''),
+            'code' => env('ECOCASH_MERCHANT_CODE', ''),
+            'number' => env('ECOCASH_MERCHANT_NUMBER', ''),
+            'api' => [
+                'url' => env('ECOCASH_MERCHANT_API_URL', ''),
+                'username' => env('ECOCASH_MERCHANT_API_USERNAME', ''),
+                'password' => env('ECOCASH_MERCHANT_API_PASSWORD', ''),
+            ]
+        ]
+    ]
+
 ];
