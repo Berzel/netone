@@ -41,6 +41,13 @@ return [
                 'password' => env('ECOCASH_MERCHANT_API_PASSWORD', ''),
             ]
         ]
-    ]
+    ],
 
+    'netone' => [
+        'api' => [
+            'url' => env('NETONE_API_URL', ''),
+            'username' => env('NETONE_API_USERNAME', ''),
+            'password' => env('NETONE_API_PASSWORD', ''),
+        ]
+    ]
 ];

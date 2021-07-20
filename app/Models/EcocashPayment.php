@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EcocashPayment extends Payment
 {
@@ -18,6 +19,16 @@ class EcocashPayment extends Payment
         'topup_id',
         'ecocash_number'
     ];
+
+    /**
+     * The owning Topup model
+     *
+     * @return
+     */
+    public function topup() : BelongsTo
+    {
+        return $this->belongsTo(Topup::class);
+    }
 
     /**
      * Get the reference code for this payment
