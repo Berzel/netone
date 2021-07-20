@@ -111,7 +111,7 @@ class EcocashService {
         }
 
         catch (\Throwable $th) {
-            // TODO: Capture exception
+            throw $th;
         }
     }
 
@@ -142,7 +142,7 @@ class EcocashService {
         }
 
         catch (\Throwable $th) {
-            // TODO: Capture exception
+            throw $th;
         }
     }
 

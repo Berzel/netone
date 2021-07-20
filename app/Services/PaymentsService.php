@@ -27,7 +27,7 @@ class PaymentsService {
         }
 
         catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
         }
     }
 
