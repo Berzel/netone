@@ -64,7 +64,7 @@ class NetoneAirtimeService {
             ])->throw();
 
             if ($response['ReplyCode'] != 2) {
-                throw new Exception($response['ReplyMsg']);
+                throw new Exception($response['ReplyMessage'] ?? $response['ReplyMsg']);
             }
 
             $topup->status = 'completed';
