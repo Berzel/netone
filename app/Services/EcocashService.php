@@ -135,7 +135,8 @@ class EcocashService {
 
             $statusHandlers = [
                 'FAILED' => fn(): EcocashPayment => $this->onPaymentFailed($payment),
-                'COMPLETED' => fn(): EcocashPayment => $this->onPaymentCompleted($payment)
+                'COMPLETED' => fn(): EcocashPayment => $this->onPaymentCompleted($payment),
+                'PENDING SUBSCRIBER VALIDATION' => fn(): EcocashPayment => $payment
             ];
 
             return $statusHandlers[$txStatus]();
@@ -157,7 +158,6 @@ class EcocashService {
         $payment->status = 'failed';
         $payment->save();
 
-        event(new EcocashPaymentCompleted($payment));
         event(new EcocashPaymentFailed($payment));
         return $payment->fresh();
     }
