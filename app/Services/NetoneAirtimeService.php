@@ -76,10 +76,7 @@ class NetoneAirtimeService {
         catch (\Throwable $th) {
             $topup->status = 'failed';
             $topup->save();
-
-            // TODO: Capture exception
-
-            return $topup->fresh();
+            throw $th;
         }
     }
 }
