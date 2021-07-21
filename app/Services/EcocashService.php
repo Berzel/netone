@@ -157,6 +157,7 @@ class EcocashService {
         $payment->status = 'failed';
         $payment->save();
 
+        event(new EcocashPaymentCompleted($payment));
         event(new EcocashPaymentFailed($payment));
         return $payment->fresh();
     }
