@@ -37,7 +37,7 @@ class EcocashPayment extends Payment
      */
     public function getReferenceCodeAttribute() : string
     {
-        return 'qwiktech_netone_payment_'.$this->id;
+        return 'QWIK_NET_'.$this->id;
     }
 
     /**
@@ -47,7 +47,7 @@ class EcocashPayment extends Payment
      */
     public function getClientCorrelatorAttribute() : string
     {
-        return $this->reference_code.'_timestamp_'.$this->created_at->timestamp;
+        return $this->reference_code.'_TAMP_'.$this->created_at->timestamp;
     }
 
     /**
