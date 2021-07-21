@@ -38,6 +38,8 @@ class RechargePinlessController extends Controller
     public function __invoke(RechargePinlessRequest $request) : JsonResponse
     {
         $topup = $this->rechargeService->recharge(new RechargeCommand($request->all()));
-        return response()->json($topup, HttpResponse::HTTP_CREATED);
+        $fields = ['id', 'amount', 'netone_number'];
+        $fields = $topup->select($fields)->find($topup->id);
+        return response()->json($fields, HttpResponse::HTTP_CREATED);
     }
 }
