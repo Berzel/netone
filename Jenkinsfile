@@ -27,7 +27,14 @@ pipeline {
             steps {
                 sh "composer install --optimize-autoloader --no-interaction"
                 sh "php artisan config:clear"
-                sh "mkdir -p ~/netone/${env.BRANCH_NAME}/current"
+                sh "mkdir -p ~/netone/${env.BRANCH_NAME}/current/storage"
+
+                sh "touch ~/netone/${env.BRANCH_NAME}/current/.env"
+                sh "touch ~/netone/${env.BRANCH_NAME}/current/current"
+                sh "touch ~/netone/${env.BRANCH_NAME}/current/root"
+                sh "touch ~/netone/${env.BRANCH_NAME}/current/worker.log"
+                sh "touch ~/netone/${env.BRANCH_NAME}/current/supervisord.conf"
+
                 sh "ln -fs ~/netone/${env.BRANCH_NAME}/current/.env .env"
                 sh "./vendor/bin/phpunit --filter Feature"
             }
