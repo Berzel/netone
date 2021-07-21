@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Topup extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    /**
+     * The attributes that should be mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'amount',
+        'status',
+        'netone_number',
+        'payment_id',
+        'payment_method',
+    ];
+
+    /**
+     * This topup's payment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function payment()
+    {
+        return $this->morphTo(__FUNCTION__, 'payment_method', 'payment_id');
+    }
+
+    /**
+     * Get the reference code
+     *
+     * @return string
+     */
+    public function getReferenceCodeAttribute() : string
+    {
+        return 'qwiktech_netone_topup_'.$this->id.'_timestamp_'.$this->created_at->timestamp;
+    }
+}
