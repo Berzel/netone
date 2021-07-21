@@ -37,7 +37,7 @@ class EcocashPayment extends Payment
      */
     public function getReferenceCodeAttribute() : string
     {
-        return 'QWIK_NET_'.$this->id;
+        return 'QWIK_NET_P'.$this->id;
     }
 
     /**

@@ -41,6 +41,6 @@ class Topup extends Model
      */
     public function getReferenceCodeAttribute() : string
     {
-        return 'qwiktech_netone_topup_'.$this->id.'_timestamp_'.$this->created_at->timestamp;
+        return 'QWIK_NET_T'.$this->id.'_TAMP_'.$this->created_at->timestamp;
     }
 }
