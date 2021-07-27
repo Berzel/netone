@@ -60,7 +60,7 @@ class NetoneAirtimeService {
             ])->post($this->apiBaseUrl.'/agents/recharge-pinless', [
                 'amount' => $topup->amount,
                 'targetMobile' => $topup->netone_number,
-                'CustomerSMS' => '%AMOUNT% airtime topped up, new balance %FINALBALANCE%. Thanks for using magetsi.co.zw.'
+                'CustomerSMS' => 'You have received $%AMOUNT% airtime top up from Magetsi. Your new balance is $%FINALBALANCE%.'
             ])->throw();
 
             if ($response['ReplyCode'] != 2) {
