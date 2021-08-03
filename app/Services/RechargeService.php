@@ -38,6 +38,7 @@ class RechargeService {
     {
         DB::beginTransaction();
         $topup = Topup::create($command->data());
+        $topup->update(['amount' => number_format(1.05 * $topup->amount, 2, '.', '')]);
         $payment = $this->paymentsService->create(new CreatePaymentCommand($command->data()));
         $topup->update(['payment_id' => $payment->id, 'payment_method' => get_class($payment)]);
         $payment->update(['topup_id' => $topup->id]);
