@@ -16,7 +16,7 @@ class CreateTopupsTable extends Migration
         Schema::create('topups', function (Blueprint $table) {
             $table->id();
             $table->string('netone_number');
-            $table->unsignedBigInteger('amount');
+            $table->string('amount');
             $table->enum('status', ['pending','failed','completed'])->default('pending');
             $table->unsignedBigInteger('payment_id')->nullable();
             $table->string('payment_method')->nullable();
