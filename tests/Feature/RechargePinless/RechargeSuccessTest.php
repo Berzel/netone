@@ -35,7 +35,7 @@ class RechargeSuccessTest extends TestCase
             ->assertJsonPath('id', 1);
 
         $this->assertDatabaseHas('topups', [
-            'amount' => 25,
+            'amount' => number_format(1.05 * 25, 2, '.', ''), // includes the 5% bonus token
             'status' => 'pending',
             'netone_number' => '0717409643',
             'payment_id' => 1,

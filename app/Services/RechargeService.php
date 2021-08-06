@@ -37,14 +37,12 @@ class RechargeService {
     public function recharge(RechargeCommand $command) : Topup
     {
         DB::beginTransaction();
-        $topup = Topup::create([
-            'amount' => floatval(number_format(1.05 * $command->data()['amount'], 2, '.', '')),
-            'netone_number' => $command->data()['amount']
-        ]);
+        $topup = Topup::create($command->data());
         $payment = $this->paymentsService->create(new CreatePaymentCommand($command->data()));
         $topup->update([
             'payment_id' => $payment->id,
-            'payment_method' => get_class($payment)
+            'payment_method' => get_class($payment),
+            'amount' => number_format(1.05 * $command->data()['amount'], 2, '.', '')
         ]);
         $payment->update(['topup_id' => $topup->id]);
         event(new TopupInitiated($topup));
