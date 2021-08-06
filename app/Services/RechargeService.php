@@ -42,7 +42,7 @@ class RechargeService {
         $topup->update([
             'payment_id' => $payment->id,
             'payment_method' => get_class($payment),
-            'amount' => number_format(1.05 * $topup->amount, 2, '')
+            'amount' => number_format(1.05 * $topup->amount, 2, '.', '')
         ]);
         $payment->update(['topup_id' => $topup->id]);
         event(new TopupInitiated($topup));
