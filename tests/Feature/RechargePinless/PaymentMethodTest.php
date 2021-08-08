@@ -45,9 +45,7 @@ class PaymentMethodTest extends TestCase
             'ecocash_number' => '0782632563',
         ]);
 
-        $response
-            ->assertStatus(Response::HTTP_CREATED);
-
+        $response->assertCreated();
         $ecoCashService->shouldHaveReceived('charge')->once();
     }
 

@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Commands\TopupAirtimeCommand;
+use App\Events\TopupFailed;
 use App\Models\Topup;
-use Exception;
 use Illuminate\Support\Facades\Http;
 
 class NetoneAirtimeService {
@@ -52,6 +52,13 @@ class NetoneAirtimeService {
     {
         $topup = Topup::find($command->get('id'));
 
+        if ($topup->is_complete) {
+            return $topup;
+        }
+
+        $topup->attempts += 1;
+        $topup->save();
+
         try {
             $response = Http::withHeaders([
                 'x-access-code' => $this->apiUsername,
@@ -64,7 +71,7 @@ class NetoneAirtimeService {
             ])->throw();
 
             if ($response['ReplyCode'] != 2) {
-                throw new Exception($response['ReplyMessage'] ?? $response['ReplyMsg']);
+                throw new \Exception($response['ReplyMessage'] ?? $response['ReplyMsg']);
             }
 
             $topup->status = 'completed';
@@ -74,6 +81,7 @@ class NetoneAirtimeService {
         }
 
         catch (\Throwable $th) {
+            event(new TopupFailed($topup));
             $topup->status = 'failed';
             $topup->save();
             throw $th;

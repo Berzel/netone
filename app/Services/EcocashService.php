@@ -63,7 +63,6 @@ class EcocashService {
         $this->merchantPin = config('services.ecocash.merchant.pin');
         $this->merchantCode = config('services.ecocash.merchant.code');
         $this->merchantNumber = config('services.ecocash.merchant.number');
-
         $this->merchantApiBaseUrl = config('services.ecocash.merchant.api.url');
         $this->merchantApiUsername = config('services.ecocash.merchant.api.username');
         $this->merchantApiPassword = config('services.ecocash.merchant.api.password');

@@ -41,6 +41,16 @@ class Topup extends Model
      */
     public function getReferenceCodeAttribute() : string
     {
-        return 'QWIK_NET_T'.$this->id.'_TAMP_'.$this->created_at->timestamp;
+        return 'QWIK_NET_T'.$this->id.'_TAMP_'.$this->created_at->timestamp.'_ATT_'.$this->attempts;
+    }
+
+    /**
+     * Check whether the top is commplete
+     *
+     * @return bool
+     */
+    public function getIsCompleteAttribute() : bool
+    {
+        return $this->status === 'completed';
     }
 }
