@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('ecocash-payments:check')->everyMinute();
+        $schedule->command('topups:purge')->everyFiveMinutes();
     }
 
     /**

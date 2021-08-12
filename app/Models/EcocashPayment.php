@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EcocashPayment extends Payment
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that should be mass assignable
