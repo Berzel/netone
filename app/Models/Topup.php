@@ -53,19 +53,4 @@ class Topup extends Model
     {
         return $this->status === 'completed';
     }
-
-    /**
-     * Get the payment_method attribute
-     *
-     * @param string $value
-     * @return string
-     */
-    public function getPaymentMethodAttribute(string $value) : string
-    {
-        if ($value === EcocashPayment::class) {
-            return 'ecocash';
-        }
-
-        return $value;
-    }
 }
