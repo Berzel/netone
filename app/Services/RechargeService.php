@@ -37,7 +37,8 @@ class RechargeService {
      */
     public function recharge(RechargeCommand $command) : Topup
     {
-        $refCode = $command->get('referral_code');
+        $refCode = array_key_exists('referral_code', $command->data()) ? $command->data()['referral_code'] : null;
+
         DB::beginTransaction();
         $topup = Topup::create($command->data());
         $payment = $this->paymentsService->create(new CreatePaymentCommand($command->data()));
@@ -48,7 +49,8 @@ class RechargeService {
         ]);
         $payment->update(['topup_id' => $topup->id]);
 
-        if ($referrer = WhatsappUser::whereReferralCode($command->get('referral_code'))->first()) {
+        if (isset($refCode)) {
+            $referrer = WhatsappUser::whereReferralCode($command->get('referral_code'))->first();
             $referrer->points += 0.03 * $payment->amount;
             $referrer->save();
         }
