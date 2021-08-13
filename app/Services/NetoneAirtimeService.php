@@ -87,4 +87,22 @@ class NetoneAirtimeService {
             throw $th;
         }
     }
+
+    /**
+     * Check the agent balance
+     *
+     * @return array
+     */
+    public function checkAgentBalance() : array
+    {
+        $response = Http::withHeaders([
+            'x-access-code' => $this->apiUsername,
+            'x-access-password' => $this->apiPassword,
+            'x-agent-reference' => uniqid()
+        ])->get($this->apiBaseUrl.'/agents/wallet-balance')->throw();
+
+        return [
+            'balance' => $response['WalletBalance']
+        ];
+    }
 }
