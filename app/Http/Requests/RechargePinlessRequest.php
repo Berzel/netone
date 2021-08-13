@@ -30,6 +30,7 @@ class RechargePinlessRequest extends FormRequest
             'amount' => ['required', 'numeric', new ValidMoney],
             'payment_method' => ['required', 'in:ecocash'],
             'netone_number' => ['required', new ValidNetoneNumber],
+            'referral_code' => ['nullable', 'exists:whatsapp_users,referral_code'],
             'ecocash_number' => ['required_if:payment_method,ecocash', new ValidEcoCashNumber]
         ];
     }

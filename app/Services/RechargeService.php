@@ -6,6 +6,7 @@ use App\Commands\CreatePaymentCommand;
 use App\Commands\RechargeCommand;
 use App\Events\TopupInitiated;
 use App\Models\Topup;
+use App\Models\WhatsappUser;
 use Illuminate\Support\Facades\DB;
 
 class RechargeService {
@@ -36,15 +37,22 @@ class RechargeService {
      */
     public function recharge(RechargeCommand $command) : Topup
     {
+        $refCode = $command->get('referral_code');
         DB::beginTransaction();
         $topup = Topup::create($command->data());
         $payment = $this->paymentsService->create(new CreatePaymentCommand($command->data()));
         $topup->update([
             'payment_id' => $payment->id,
             'payment_method' => get_class($payment),
-            'amount' => 1.05 * $topup->amount
+            'amount' => isset($refCode) ? 1.07 * $payment->amount : 1.05 * $payment->amount
         ]);
         $payment->update(['topup_id' => $topup->id]);
+
+        if ($referrer = WhatsappUser::whereReferralCode($command->get('referral_code'))->first()) {
+            $referrer->points += 0.03 * $payment->amount;
+            $referrer->save();
+        }
+
         event(new TopupInitiated($topup));
         DB::commit();
 
