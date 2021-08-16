@@ -15,6 +15,6 @@ class ShowAdminTopus extends Controller
      */
     public function __invoke(Request $request)
     {
-        return response()->json(Topup::with(['payment'])->latest()->paginate());
+        return response()->json(Topup::with(['payment'])->latest()->paginate(10));
     }
 }
